@@ -1,0 +1,33 @@
+service: AWS-KMS-SelfLearning
+
+provider:
+  name: aws
+  runtime: java8
+  region: ap-southeast-2
+  versionFunctions: false
+  profile: tw-aws-beach
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+      Resource: "*"
+
+package:
+  artifact: build/libs/hello-kms-1.0-SNAPSHOT.jar
+
+functions:
+  index:
+    handler: lambda.backoffice
+    events:
+      - http:
+          path: hello
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    SuperTopicNew:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: MyCustomTopic

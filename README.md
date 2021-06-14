@@ -72,3 +72,17 @@ AWS 如何进行自动 Key rotation？
 自动 Key rotation 之后收费有什么变化？
 
 ```
+
+
+How to deploy a stack:
+```shell
+brew install serverless
+```
+
+```shell
+saml2aws login --profile tw-aws-beach
+```
+
+```shell
+sls deploy
+```
