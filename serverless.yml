@@ -6,28 +6,51 @@ provider:
   region: ap-southeast-2
   versionFunctions: false
   profile: tw-aws-beach
+  iam:
+    role:
+      name: newCustomRoleNameForMJJ
 
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - lambda:InvokeFunction
+        - kms:*
       Resource: "*"
 
 package:
   artifact: build/libs/hello-kms-1.0-SNAPSHOT.jar
 
-functions:
-  index:
-    handler: lambda.backoffice
-    events:
-      - http:
-          path: hello
-          method: post
-          cors: true
-
 resources:
   Resources:
-    SuperTopicNew:
-      Type: AWS::SNS::Topic
+    RSASigningKey:
+      Type: AWS::KMS::Key
       Properties:
-        TopicName: MyCustomTopic
+        Description: RSA_4096 asymmetric CMK for signing and verification
+        KeySpec: RSA_4096
+        KeyUsage: SIGN_VERIFY
+        KeyPolicy:
+          Version: '2012-10-17'
+          Id: key-default-2
+          Statement:
+            - Sid: Enable IAM User Permissions
+              Effect: Allow
+              Principal:
+                AWS: arn:aws:iam::160071257600:root
+              Action: kms:*
+              Resource: '*'
+
+#    SymmetricEncryption:
+#      Type: AWS::KMS::Key
+#      Properties:
+#        Description: An example symmetric CMK
+#        EnableKeyRotation: true
+#        PendingWindowInDays: 20
+#        KeyPolicy:
+#          Version: '2012-10-17'
+#          Id: key-default-1
+#          Statement:
+#            - Sid: Enable IAM User Permissions
+#              Effect: Allow
+#              Principal:
+#                AWS: arn:aws:iam::160071257600:user/newCustomRoleNameForMJJ
+#              Action: kms:*
+#              Resource: '*'

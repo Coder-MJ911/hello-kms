@@ -58,6 +58,9 @@ Advanced
 AC:
 练习
 使用 CloudFormation 创建 KMS RSA_4096 的 key
+key-id:
+93fc37c6-eea2-454e-b545-7bd8a3104bc3
+
 
 加密并解密一段字符串
 
@@ -68,7 +71,8 @@ AC:
 
 回答下列问题
 如何进行 Key rotation？
-AWS 如何进行自动 Key rotation？
+AWS 如何进行自动 Key rotation？答案：设置EnableKeyRotation为true即可。
+
 自动 Key rotation 之后收费有什么变化？
 
 ```
