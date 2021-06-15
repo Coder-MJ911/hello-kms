@@ -11,10 +11,17 @@ provider:
     - Effect: Allow
       Action:
         - kms:*
+        - lambda:InvokeFunction
       Resource: "*"
 
 package:
-  artifact: build/libs/hello-kms-1.0-SNAPSHOT.jar
+  artifact: build/libs/hello-kms.jar
+
+functions:
+  LambdaToEncryptAndDecrypt:
+    handler: lambda.Lambda1
+    timeout: 900
+    reservedConcurrency: 100
 
 resources:
   Resources:
