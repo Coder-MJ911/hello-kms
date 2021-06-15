@@ -59,7 +59,8 @@ AC:
 练习
 使用 CloudFormation 创建 KMS RSA_4096 的 key
 key-id:
-93fc37c6-eea2-454e-b545-7bd8a3104bc3
+8d468822-9303-4150-bfaa-5be96d164449
+aws kms encrypt --region ap-southeast-2 --key-id 8d468822-9303-4150-bfaa-5be96d164449 --plaintext "This is text before encryption" --output text --query CiphertextBlob --cli-binary-format raw-in-base64-out --profile tw-aws-beach --encryption-algorithm RSAES_OAEP_SHA_256
 
 
 加密并解密一段字符串

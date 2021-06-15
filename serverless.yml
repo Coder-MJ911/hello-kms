@@ -6,9 +6,6 @@ provider:
   region: ap-southeast-2
   versionFunctions: false
   profile: tw-aws-beach
-  iam:
-    role:
-      name: newCustomRoleNameForMJJ
 
   iamRoleStatements:
     - Effect: Allow
@@ -24,19 +21,22 @@ resources:
     RSASigningKey:
       Type: AWS::KMS::Key
       Properties:
-        Description: RSA_4096 asymmetric CMK for signing and verification
+        Description: RSA_4096 asymmetric CMK
         KeySpec: RSA_4096
-        KeyUsage: SIGN_VERIFY
+        KeyUsage: ENCRYPT_DECRYPT
         KeyPolicy:
           Version: '2012-10-17'
           Id: key-default-2
           Statement:
             - Sid: Enable IAM User Permissions
-              Effect: Allow
+              Effect: allow
               Principal:
                 AWS: arn:aws:iam::160071257600:root
               Action: kms:*
               Resource: '*'
+              Condition:
+                StringNotEquals:
+                  kms:EncryptionAlgorithm: RSAES_OAEP_SHA_256
 
 #    SymmetricEncryption:
 #      Type: AWS::KMS::Key
@@ -51,6 +51,6 @@ resources:
 #            - Sid: Enable IAM User Permissions
 #              Effect: Allow
 #              Principal:
-#                AWS: arn:aws:iam::160071257600:user/newCustomRoleNameForMJJ
+#                AWS: arn:aws:iam::160071257600:root
 #              Action: kms:*
 #              Resource: '*'
