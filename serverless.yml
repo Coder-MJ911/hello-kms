@@ -31,7 +31,9 @@ resources:
             - Sid: Enable IAM User Permissions
               Effect: allow
               Principal:
-                AWS: arn:aws:iam::160071257600:root
+                AWS:
+                  - arn:aws:iam::160071257600:root
+                  - arn:aws:iam::160071257600:role/PowerUserPlusRole
               Action: kms:*
               Resource: '*'
               Condition:

@@ -62,7 +62,6 @@ key-id:
 8d468822-9303-4150-bfaa-5be96d164449
 aws kms encrypt --region ap-southeast-2 --key-id 8d468822-9303-4150-bfaa-5be96d164449 --plaintext "This is text before encryption" --output text --query CiphertextBlob --cli-binary-format raw-in-base64-out --profile tw-aws-beach --encryption-algorithm RSAES_OAEP_SHA_256
 
-
 加密并解密一段字符串
 
 将 KMS Key 与其他服务一同使用（Basic 里的对称加密 Key），如
