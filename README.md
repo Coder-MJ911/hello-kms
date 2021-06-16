@@ -64,19 +64,9 @@ key-id:
 加密并解密一段字符串
 加密：
 aws kms encrypt --region ap-southeast-2 --key-id 8d468822-9303-4150-bfaa-5be96d164449 --encryption-context contextName=service1 --plaintext "This is text before encryption" --output text --query CiphertextBlob --cli-binary-format raw-in-base64-out --profile tw-aws-beach --encryption-algorithm RSAES_OAEP_SHA_256
-aws kms encrypt \
---region ap-southeast-2 \
---key-id 8d468822-9303-4150-bfaa-5be96d164449 \
---encryption-context database_username=service1 \
---plaintext "This is text before encryption" \
---output text \
---query CiphertextBlob \
---profile tw-aws-beach --encryption-algorithm RSAES_OAEP_SHA_256
---cli-binary-format raw-in-base64-out
 
 解密：
-aws kms decrypt --region ap-southeast-2 --key-id 8d468822-9303-4150-bfaa-5be96d164449 --ciphertext-blob 'QlHbocxGwgj1g+ERZLhKkjy2CMqUBOUL/O+y8FYF1efE7mSDpKqx3pDsptFb7ts/EsOEV4k0dpjR8H0gh9nhPcB2H39rBOXwI6grQP07e9cowv2bnk0Z+8GVKnDU1b4u72be5emlAcKbyYDRSaPgHg+jGI/dB4qxoMvpqP/u8FICENXLV1mYV863OkOGiWU4O+mqUyWexND7N8IZEpD8hX9GH/oso/i1B/OlqwL2FFBMr793CsLkcQ7CT844hRQ7rtVyQ2nqRE+ai8Yi2/47YcXMaj4UIpTLp4M80aP7UNmr9+j8Tw/XNxf4kCNVWWM5GYmlPaIkzqr4GKQJU/c6T9gTMF1vFJEYj0U4I0aoc1SW3aMd2sR4Ed0vPM1tUCKf3HuHxucNAKUK4D+17OcYbPEndQQSJPab8Ib86nXTscZh4zixwscLwM79jJmnJx8Cne3mNpIuBI+WV/t9imKDsKdbt1/RfH4Z51krU5Blcx65r1nNaZyj2P8/AQJ6b53Pxc8Y8cfzwmN0ZoHOU6zZ+g+z80aJTIIOwGtUSbZWE/qbhG1iip7IxaXrwebF3ijbMO6hgjKM4JMYYAxPhuyqeWVFMhM2+OIz+UcSPV5oNcjzYuUBMZauivd6/wDkScTn/Ar04Pm5uUNky+DoE9HvqVVtYdqAOet4Uiif2QbG+4Y=' --output text --query Plaintext --profile tw-aws-beach | base64 -D
-aws kms descriptor --ciphertext-blob "QlHbocxGwgj1g+ERZLhKkjy2CMqUBOUL/O+y8FYF1efE7mSDpKqx3pDsptFb7ts/EsOEV4k0dpjR8H0gh9nhPcB2H39rBOXwI6grQP07e9cowv2bnk0Z+8GVKnDU1b4u72be5emlAcKbyYDRSaPgHg+jGI/dB4qxoMvpqP/u8FICENXLV1mYV863OkOGiWU4O+mqUyWexND7N8IZEpD8hX9GH/oso/i1B/OlqwL2FFBMr793CsLkcQ7CT844hRQ7rtVyQ2nqRE+ai8Yi2/47YcXMaj4UIpTLp4M80aP7UNmr9+j8Tw/XNxf4kCNVWWM5GYmlPaIkzqr4GKQJU/c6T9gTMF1vFJEYj0U4I0aoc1SW3aMd2sR4Ed0vPM1tUCKf3HuHxucNAKUK4D+17OcYbPEndQQSJPab8Ib86nXTscZh4zixwscLwM79jJmnJx8Cne3mNpIuBI+WV/t9imKDsKdbt1/RfH4Z51krU5Blcx65r1nNaZyj2P8/AQJ6b53Pxc8Y8cfzwmN0ZoHOU6zZ+g+z80aJTIIOwGtUSbZWE/qbhG1iip7IxaXrwebF3ijbMO6hgjKM4JMYYAxPhuyqeWVFMhM2+OIz+UcSPV5oNcjzYuUBMZauivd6/wDkScTn/Ar04Pm5uUNky+DoE9HvqVVtYdqAOet4Uiif2QbG+4Y=" --output text --query Plaintext --region ap-southeast-2 --profile tw-aws-beach | base64 -D
+aws kms decrypt --region ap-southeast-2 --key-id 8d468822-9303-4150-bfaa-5be96d164449 --ciphertext-blob 'QlHbocxGwgj1g+ERZLhKkjy2CMqUBOUL/O+y8FYF1efE7mSDpKqx3pDsptFb7ts/EsOEV4k0dpjR8H0gh9nhPcB2H39rBOXwI6grQP07e9cowv2bnk0Z+8GVKnDU1b4u72be5emlAcKbyYDRSaPgHg+jGI/dB4qxoMvpqP/u8FICENXLV1mYV863OkOGiWU4O+mqUyWexND7N8IZEpD8hX9GH/oso/i1B/OlqwL2FFBMr793CsLkcQ7CT844hRQ7rtVyQ2nqRE+ai8Yi2/47YcXMaj4UIpTLp4M80aP7UNmr9+j8Tw/XNxf4kCNVWWM5GYmlPaIkzqr4GKQJU/c6T9gTMF1vFJEYj0U4I0aoc1SW3aMd2sR4Ed0vPM1tUCKf3HuHxucNAKUK4D+17OcYbPEndQQSJPab8Ib86nXTscZh4zixwscLwM79jJmnJx8Cne3mNpIuBI+WV/t9imKDsKdbt1/RfH4Z51krU5Blcx65r1nNaZyj2P8/AQJ6b53Pxc8Y8cfzwmN0ZoHOU6zZ+g+z80aJTIIOwGtUSbZWE/qbhG1iip7IxaXrwebF3ijbMO6hgjKM4JMYYAxPhuyqeWVFMhM2+OIz+UcSPV5oNcjzYuUBMZauivd6/wDkScTn/Ar04Pm5uUNky+DoE9HvqVVtYdqAOet4Uiif2QbG+4Y=' --output text --query Plaintext --profile tw-aws-beach --encryption-algorithm RSAES_OAEP_SHA_256 | base64 -D
 
 将 KMS Key 与其他服务一同使用（Basic 里的对称加密 Key），如
 
