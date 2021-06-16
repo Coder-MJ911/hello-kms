@@ -67,7 +67,16 @@ aws kms encrypt --region ap-southeast-2 --key-id 8d468822-9303-4150-bfaa-5be96d1
 将 KMS Key 与其他服务一同使用（Basic 里的对称加密 Key），如
 
 加密 S3 文件
+答案：见serverless.yml
+download from console page or run this following cli:
+aws s3 cp s3://encrypted-bucket-kms-learning/test ./test --profile tw-aws-beach --region ap-southeast-2
+
 加密 parameter store 里的值
+答案：
+aws ssm put-parameter --name kmsTestKeyMjj --value "secret-value" --type SecureString --key-id 742c058a-0791-4f00-9d3a-df4717c64301 --profile tw-aws-beach --region ap-southeast-2
+aws ssm get-parameter --name kmsTestKeyMjj --profile tw-aws-beach --region ap-southeast-2 //获取kmsTestKeyMjj参数，而不解密其值
+aws ssm get-parameter --name kmsTestKeyMjj --profile tw-aws-beach --region ap-southeast-2 --with-decryption //获取kmsTestKeyMjj参数，并解密其值
+
 
 回答下列问题
 如何进行 Key rotation？

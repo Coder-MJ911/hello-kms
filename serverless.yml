@@ -47,6 +47,17 @@ resources:
                 StringNotEquals:
                   kms:EncryptionAlgorithm: RSAES_OAEP_SHA_256
 
+    EncryptedS3Bucket:
+      Type: 'AWS::S3::Bucket'
+      Properties:
+        BucketName: 'encrypted-bucket-kms-learning'
+        BucketEncryption:
+          ServerSideEncryptionConfiguration:
+            - ServerSideEncryptionByDefault:
+                SSEAlgorithm: 'aws:kms'
+                KMSMasterKeyID: 'arn:aws:kms:ap-southeast-2:160071257600:key/742c058a-0791-4f00-9d3a-df4717c64301'
+      DeletionPolicy: Delete
+
 #    SymmetricEncryption:
 #      Type: AWS::KMS::Key
 #      Properties:

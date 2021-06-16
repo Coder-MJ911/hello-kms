@@ -5,10 +5,17 @@ import com.amazonaws.encryptionsdk.CryptoResult;
 import com.amazonaws.encryptionsdk.kms.KmsMasterKey;
 import com.amazonaws.encryptionsdk.kms.KmsMasterKeyProvider;
 
+import com.amazonaws.services.kms.AWSKMS;
+import com.amazonaws.services.kms.AWSKMSClientBuilder;
+import com.amazonaws.services.kms.model.DecryptRequest;
+import com.amazonaws.services.kms.model.EncryptRequest;
+import com.amazonaws.services.kms.model.GenerateDataKeyWithoutPlaintextRequest;
+import com.amazonaws.services.kms.model.GenerateDataKeyWithoutPlaintextResult;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,57 +32,22 @@ public class Lambda1 implements RequestHandler<Map<String, String>, String> {
         logger.log(clearText);
         logger.log("After convert to Byte:" + Arrays.toString(EXAMPLE_DATA));
         String KEY_ARN = "arn:aws:kms:ap-southeast-2:160071257600:key/8d468822-9303-4150-bfaa-5be96d164449";
-        encryptAndDecrypt(KEY_ARN, logger);
+        encryptAndDecryptOther(KEY_ARN, logger);
         return "";
     }
-    public void encryptAndDecrypt(final String keyArn, LambdaLogger logger) {
-        // 1. Instantiate the SDK
-        final AwsCrypto crypto = new AwsCrypto();
-        logger.log("1. Instantiate the SDK");
+    public void encryptAndDecryptOther(final String keyArn, LambdaLogger logger) {
+        AWSKMS kmsClient = AWSKMSClientBuilder.standard().build();
+        GenerateDataKeyWithoutPlaintextRequest request = new GenerateDataKeyWithoutPlaintextRequest()
+                .withKeyId(keyArn).withKeySpec("RSA_4096");
+        GenerateDataKeyWithoutPlaintextResult response = kmsClient.generateDataKeyWithoutPlaintext(request);
+        logger.log(response.toString());
 
-        // 2. Instantiate a KMS master key provider
-        final KmsMasterKeyProvider masterKeyProvider = KmsMasterKeyProvider.builder().withKeysForEncryption(keyArn).build();
-        logger.log("2. Instantiate a KMS master key provider");
 
-        // 3. Create an encryption context
-        //
-        // Most encrypted data should have an associated encryption context
-        // to protect integrity. This sample uses placeholder values.
-        //
-        // For more information see:
-        // blogs.aws.amazon.com/security/post/Tx2LZ6WBJJANTNW/How-to-Protect-the-Integrity-of-Your-Encrypted-Data-by-Using-AWS-Key-Management
-        final Map<String, String> encryptionContext = Collections.singletonMap("ExampleContextKey", "ExampleContextValue");
-        logger.log("3. Create an encryption context");
+        EncryptRequest req = new EncryptRequest().withKeyId(keyArn).withPlaintext(ByteBuffer.wrap(EXAMPLE_DATA));
+        ByteBuffer ciphertext = kmsClient.encrypt(req).getCiphertextBlob();
+        logger.log("After encrypt ciphertext is: "+ciphertext);
 
-        // 4. Encrypt the data
-        final CryptoResult<byte[], KmsMasterKey> encryptResult = crypto.encryptData(masterKeyProvider, EXAMPLE_DATA, encryptionContext);
-        final byte[] ciphertext = encryptResult.getResult();
-        logger.log("4. Encrypt the data");
-
-        // 5. Decrypt the data
-        final CryptoResult<byte[], KmsMasterKey> decryptResult = crypto.decryptData(masterKeyProvider, ciphertext);
-        logger.log(" 5. Decrypt the data");
-
-        // 6. Before verifying the plaintext, verify that the customer master key that
-        // was used in the encryption operation was the one supplied to the master key provider.
-        if (!decryptResult.getMasterKeyIds().get(0).equals(keyArn)) {
-            throw new IllegalStateException("Wrong key ID!");
-        }
-        logger.log("6. Before verifying the plaintext, verify that the customer master key that");
-
-        // 7. Also, verify that the encryption context in the result contains the
-        // encryption context supplied to the encryptData method. Because the
-        // SDK can add values to the encryption context, don't require that
-        // the entire context matches.
-        if (!encryptionContext.entrySet().stream()
-                .allMatch(e -> e.getValue().equals(decryptResult.getEncryptionContext().get(e.getKey())))) {
-            throw new IllegalStateException("Wrong Encryption Context!");
-        }
-        logger.log("7. Also, verify that the encryption context in the result");
-
-        // 8. Verify that the decrypted plaintext matches the original plaintext
-        byte[] result = decryptResult.getResult();
-        logger.log("8. Verify that the decrypted plaintext matches the original plaintext");
-        logger.log("After decrypt, the text is:" + Arrays.toString(result));
+        DecryptRequest req1 = new DecryptRequest().withCiphertextBlob(ciphertext);
+        ByteBuffer plainText = kmsClient.decrypt(req1).getPlaintext();
     }
 }
