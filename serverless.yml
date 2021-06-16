@@ -40,12 +40,9 @@ resources:
               Principal:
                 AWS:
                   - arn:aws:iam::160071257600:root
-                  - arn:aws:iam::160071257600:role/PowerUserPlusRole
+                  - arn:aws:sts::160071257600:assumed-role/PowerUserPlusRole/jiajie.ma@thoughtworks.com
               Action: kms:*
               Resource: '*'
-              Condition:
-                StringNotEquals:
-                  kms:EncryptionAlgorithm: RSAES_OAEP_SHA_256
 
     EncryptedS3Bucket:
       Type: 'AWS::S3::Bucket'
